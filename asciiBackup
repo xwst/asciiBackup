@@ -16,64 +16,64 @@ do
 key="$1"
 
 case $key in
-    -h|--help)
-    print_help
-    exit 0
-    ;;
-    -u|--usage)
-    print_usage
-    exit 0
-    ;;
-    -i|--input)
-    INPUT="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    -x|--hex)
-    ENCFUNC="xxd -p"
-    shift # past argument
-    ;;
-    -B|--base64)
-    ENCFUNC="base64"
-    shift # past argument
-    ;;
-    -b|--base32)
-    ENCFUNC="base32"
-    shift # past argument
-    ;;
-    -e|--encoding)
-    ENCFUNC="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    -m|--md5)
-    HASHFUNC="md5sum"
-    shift # past argument
-    ;;
-    -s|--sha1)
-    HASHFUNC="sha1sum"
-    shift # past argument
-    ;;
-    -S|--sha512)
-    HASHFUNC="sha512sum"
-    shift # past argument
-    ;;
-    -H|--hash)
-    HASHFUNC="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    *)    # positional argument or unknown option
-    if [[ "${1:0:1}" == "-" ]]; then
-		echo "Unknown option '$1'."
-		exit 1
-	fi
-	if [[ ! -z $OUTFILE ]]; then # output file already set. Aborting...
-		echo "Only one output file is allowed. Aborting..."
-		exit 2
-	fi
-    OUTFILE="$1"
-    shift # past argument
-    ;;
+	-h|--help)
+		print_help
+		exit 0
+		;;
+	-u|--usage)
+		print_usage
+		exit 0
+		;;
+	-i|--input)
+		INPUT="$2"
+		shift # past argument
+		shift # past value
+		;;
+	-x|--hex)
+		ENCFUNC="xxd -p"
+		shift # past argument
+		;;
+	-B|--base64)
+		ENCFUNC="base64"
+		shift # past argument
+		;;
+	-b|--base32)
+		ENCFUNC="base32"
+		shift # past argument
+		;;
+	-e|--encoding)
+		ENCFUNC="$2"
+		shift # past argument
+		shift # past value
+		;;
+	-m|--md5)
+		HASHFUNC="md5sum"
+		shift # past argument
+		;;
+	-s|--sha1)
+		HASHFUNC="sha1sum"
+		shift # past argument
+		;;
+	-S|--sha512)
+		HASHFUNC="sha512sum"
+		shift # past argument
+		;;
+	-H|--hash)
+		HASHFUNC="$2"
+		shift # past argument
+		shift # past value
+		;;
+	*) # positional argument or unknown option
+		if [[ "${1:0:1}" == "-" ]]; then
+			echo "Unknown option '$1'."
+			exit 1
+		fi
+		if [[ ! -z $OUTFILE ]]; then # output file already set. Aborting...
+			echo "Only one output file is allowed. Aborting..."
+			exit 2
+		fi
+		OUTFILE="$1"
+		shift # past argument
+		;;
 esac
 done
