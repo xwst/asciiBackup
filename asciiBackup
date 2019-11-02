@@ -16,7 +16,13 @@ function set_hash() {
 	HASHFUNC=$1
 }
 
-ENCFUNC="xxd -p"   # default value
+function set_enc() {
+	if [[ $ENCFUNC ]]; then
+		echo "Only one encoding may be specified."
+		exit 1
+	fi
+	ENCFUNC=$1
+}
 
 while [[ $# -gt 0 ]]
 do
@@ -37,19 +43,19 @@ case $key in
 		shift # past value
 		;;
 	-x|--hex)
-		ENCFUNC="xxd -p"
+		set_enc "xxd -p"
 		shift # past argument
 		;;
 	-B|--base64)
-		ENCFUNC="base64"
+		set_enc "base64"
 		shift # past argument
 		;;
 	-b|--base32)
-		ENCFUNC="base32"
+		set_enc "base32"
 		shift # past argument
 		;;
 	-e|--encoding)
-		ENCFUNC="$2"
+		set_enc "$2"
 		shift # past argument
 		shift # past value
 		;;
@@ -87,4 +93,7 @@ done
 
 if [[ ! $HASHFUNC ]]; then
 	HASHFUNC="sha1sum" # default value
+fi
+if [[ ! $ENCFUNC ]]; then
+	ENCFUNC="xxd -p" # default value
 fi
