@@ -8,7 +8,14 @@ function print_usage() {
 	echo "usage info"
 }
 
-HASHFUNC="sha1sum" # default value
+function set_hash() {
+	if [[ $HASHFUNC ]]; then
+		echo "Only one hash function may be specified."
+		exit 1
+	fi
+	HASHFUNC=$1
+}
+
 ENCFUNC="xxd -p"   # default value
 
 while [[ $# -gt 0 ]]
@@ -47,19 +54,19 @@ case $key in
 		shift # past value
 		;;
 	-m|--md5)
-		HASHFUNC="md5sum"
+		set_hash "md5sum"
 		shift # past argument
 		;;
 	-s|--sha1)
-		HASHFUNC="sha1sum"
+		set_hash "sha1sum"
 		shift # past argument
 		;;
 	-S|--sha512)
-		HASHFUNC="sha512sum"
+		set_hash "sha512sum"
 		shift # past argument
 		;;
 	-H|--hash)
-		HASHFUNC="$2"
+		set_hash "$2"
 		shift # past argument
 		shift # past value
 		;;
@@ -77,3 +84,7 @@ case $key in
 		;;
 esac
 done
+
+if [[ ! $HASHFUNC ]]; then
+	HASHFUNC="sha1sum" # default value
+fi
