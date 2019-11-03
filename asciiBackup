@@ -115,6 +115,22 @@ case $key in
 		shift
 		shift
 		;;
+	export)
+		if [[ $MODE == "import" ]]; then
+			echo "The arguments 'export' and 'import' are mutually exclusive."
+			exit 1
+		fi
+		MODE="export"
+		shift
+		;;
+	import)
+		if [[ $MODE == "export" ]]; then
+			echo "The arguments 'export' and 'import' are mutually exclusive."
+			exit 1
+		fi
+		MODE="import"
+		shift
+		;;
 	*) # positional argument or unknown option
 		if [[ "${1:0:1}" == "-" ]]; then
 			echo "Unknown option '$1'."
@@ -142,4 +158,8 @@ if [[ ! $COLS ]]; then
 fi
 if [[ ! $GROUPSIZE ]]; then
 	GROUPSIZE=6
+fi
+if [[ ! $MODE ]]; then
+	echo "One of the arguments 'export' or 'import' is mandatory."
+	exit 1
 fi
