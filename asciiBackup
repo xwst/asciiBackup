@@ -49,6 +49,10 @@ case $key in
 		exit 0
 		;;
 	-i|--input)
+		if [[ ! (-r $2 && -f $2 || "$2" == "-") ]]; then
+			echo "Error: Either '$2' is not a file or it is not readable.";
+			exit 1;
+		fi
 		INPUT="$2"
 		shift
 		shift
@@ -162,4 +166,7 @@ fi
 if [[ ! $MODE ]]; then
 	echo "One of the arguments 'export' or 'import' is mandatory."
 	exit 1
+fi
+if [[ ! $INPUT ]]; then
+	INPUT="-"
 fi
