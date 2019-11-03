@@ -50,42 +50,42 @@ case $key in
 		;;
 	-i|--input)
 		INPUT="$2"
-		shift # past argument
-		shift # past value
+		shift
+		shift
 		;;
 	-x|--hex)
 		set_enc "xxd -p"
-		shift # past argument
+		shift
 		;;
 	-B|--base64)
 		set_enc "base64"
-		shift # past argument
+		shift
 		;;
 	-b|--base32)
 		set_enc "base32"
-		shift # past argument
+		shift
 		;;
 	-e|--encoding)
 		set_enc "$2"
-		shift # past argument
-		shift # past value
+		shift
+		shift
 		;;
 	-m|--md5)
 		set_hash "md5sum"
-		shift # past argument
+		shift
 		;;
 	-s|--sha1)
 		set_hash "sha1sum"
-		shift # past argument
+		shift
 		;;
 	-S|--sha512)
 		set_hash "sha512sum"
-		shift # past argument
+		shift
 		;;
 	-H|--hash)
 		set_hash "$2"
-		shift # past argument
-		shift # past value
+		shift
+		shift
 		;;
 	-c|--columns)
 		if [[ $COLS ]]; then
@@ -111,17 +111,18 @@ case $key in
 			exit 2
 		fi
 		OUTFILE="$1"
-		shift # past argument
+		shift
 		;;
 esac
 done
 
+## Default values:
 if [[ ! $HASHFUNC ]]; then
-	HASHFUNC="sha1sum" # default value
+	HASHFUNC="sha1sum"
 fi
 if [[ ! $ENCFUNC ]]; then
-	ENCFUNC="xxd -p" # default value
+	ENCFUNC="xxd -p"
 fi
 if [[ ! $COLS ]]; then
-	COLS=36 # default value
+	COLS=36
 fi
