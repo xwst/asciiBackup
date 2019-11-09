@@ -115,7 +115,7 @@ case $key in
 		;;
 	-g|--group-size)
 		if [[ $GROUPSIZE ]]; then
-			echo "Error: Ambigious specification of group size."
+			echo "Error: ambiguous specification of group size."
 			exit 1
 		fi
 		if is_integer $2; then
