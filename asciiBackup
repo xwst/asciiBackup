@@ -127,6 +127,20 @@ case $key in
 		shift
 		shift
 		;;
+	-n|--checksum-length)
+		if [[ $CHECKLENGTH ]]; then
+			echo "Error: ambiguous specification of checksum length."
+			exit 1
+		fi
+		if is_integer $2; then
+			CHECKLENGTH=$2
+		else
+			echo "'$2' is not a valid integer."
+			exit 1
+		fi
+		shift
+		shift
+		;;
 	export)
 		if [[ $MODE == "import" ]]; then
 			echo "The arguments 'export' and 'import' are mutually exclusive."
@@ -170,6 +184,9 @@ if [[ ! $COLS ]]; then
 fi
 if [[ ! $GROUPSIZE ]]; then
 	GROUPSIZE=6
+fi
+if [[ ! $CHECKLENGTH ]]; then
+	CHECKLENGTH=3
 fi
 if [[ ! $MODE ]]; then
 	echo "One of the arguments 'export' or 'import' is mandatory."
