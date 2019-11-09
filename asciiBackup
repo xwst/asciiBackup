@@ -43,6 +43,14 @@ function split() {
 	cat - | sed "s/.\{$COLS\}/&\n/g" | sed "s/.\{$GROUPSIZE\}/& /g"
 }
 
+function out {
+	if [[ $OUTPUT == "-" ]]; then
+		cat -
+	else
+		cat - > $OUTPUT
+	fi
+}
+
 while [[ $# -gt 0 ]]
 do
 key="$1"
