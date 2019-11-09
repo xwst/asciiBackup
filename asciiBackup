@@ -35,22 +35,6 @@ function is_integer() {
 	esac
 }
 
-function normal() {
-	cat - | tr -d ' ' | tr -d '\n'
-}
-
-function split() {
-	cat - | sed "s/.\{$COLS\}/&\n/g" | sed "s/.\{$GROUPSIZE\}/& /g"
-}
-
-function out {
-	if [[ $OUTPUT == "-" ]]; then
-		cat -
-	else
-		cat - > $OUTPUT
-	fi
-}
-
 while [[ $# -gt 0 ]]
 do
 key="$1"
@@ -206,3 +190,29 @@ fi
 if [[ ! $OUTPUT ]]; then
 	OUTPUT="-"
 fi
+
+
+function normal() {
+	cat - | tr -d ' ' | tr -d '\n'
+}
+
+function split() {
+	cat - | sed "s/.\{$COLS\}/&\n/g" | sed "s/.\{$GROUPSIZE\}/& /g"
+}
+
+function out {
+	if [[ $OUTPUT == "-" ]]; then
+		cat -
+	else
+		cat - > $OUTPUT
+	fi
+}
+
+function print_formatted_line { # expects the arguments "line number" and "data"
+	# pad line number and append data:
+	LINE=$(printf %"$LL"s $1)": "$2
+	# print line with trailing dash to separate per-file checksum:
+	echo "$LINE" | sed 's/ *$/ - /' | tr -d '\n' | out
+	# append per-file checksum, xargs removes leading and trailing spaces:
+	echo $LINE | normal | $HASHFUNC | cut -c 1-$CHECKLENGTH | split | xargs | out
+}
