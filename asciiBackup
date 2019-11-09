@@ -216,3 +216,30 @@ function print_formatted_line { # expects the arguments "line number" and "data"
 	# append per-file checksum, xargs removes leading and trailing spaces:
 	echo $LINE | normal | $HASHFUNC | cut -c 1-$CHECKLENGTH | split | xargs | out
 }
+
+
+if [[ $MODE == "export" ]]; then
+	# Read, encode and split data:
+	if [[ $INPUT == "-" ]]; then
+		DATA=$(cat - | $ENCFUNC | normal | split)
+	else
+		DATA=$(cat $INPUT | $ENCFUNC | normal | split)
+	fi
+
+	# number of lines of encoded data:
+	LENGTH=$(echo "$DATA" | wc -l)
+	# number of digits of line numbers:
+	LL=$(echo -n $LENGTH | wc -c)
+	# Length of file checksum:
+	FILECHECKSUMLENGTH=$((COLS - LL - 1))
+	# Padding of line id has at least length 2 because of "id"-line
+	LL=$((LL<2 ? 2 : LL))
+	FILECHECKSUM=$(echo $DATA | normal | $HASHFUNC | cut -c 1-$FILECHECKSUMLENGTH)
+	print_formatted_line "id" "$(echo "$LENGTH#$FILECHECKSUM" | split)"
+
+	k=1
+	echo "$DATA" | while read RAWLINE; do
+		print_formatted_line $k "$RAWLINE"
+		k=$((k+1))
+	done
+fi
