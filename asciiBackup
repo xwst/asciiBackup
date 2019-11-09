@@ -35,6 +35,14 @@ function is_integer() {
 	esac
 }
 
+function normal() {
+	cat - | tr -d ' ' | tr -d '\n'
+}
+
+function split() {
+	cat - | sed "s/.\{$COLS\}/&\n/g" | sed "s/.\{$GROUPSIZE\}/& /g"
+}
+
 while [[ $# -gt 0 ]]
 do
 key="$1"
